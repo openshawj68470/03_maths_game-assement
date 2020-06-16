@@ -9,9 +9,9 @@ class Converter:
     def __init__(self):
 
         # Formatting variables
-        background_color = "#ADD8E6"
+        background_color = "#F4F6FC"
 
-        # Initialise list to hold calculation history
+        # Initialise list to hold calculation stats
         self.all_calc_list = []
         # Converter frame
         self.converter_frame = Frame(bg=background_color, height=300, width=300,
@@ -19,65 +19,55 @@ class Converter:
         self.converter_frame.grid()
 
         # Temperature entry box (row 2)
-        self.to_convert_entry = Entry(self.converter_frame, width=1,
-                                      font="Arial 14 bold", bg="white")
-        self.to_convert_entry.grid(row=2)
 
-        self.to_convert_entry = Entry(self.converter_frame, width=1,
-                                      font="Arial 14 bold", bg="white")
-        self.to_convert_entry.grid(row=2, column=1)
+        self.numbers_entry_1 = Entry(self.converter_frame, width=1,
+                                     font="Arial 14 bold", bg="white")
+        self.numbers_entry_1.grid(row=2)
+
+        self.numbers_entry_2 = Entry(self.converter_frame, width=1,
+                                     font="Arial 14 bold", bg="white")
+        self.numbers_entry_2.grid(row=2)
 
         # maths Heading (row 0)
-        self.maths_converter_label = Label(self.converter_frame, text="maths",
-                                          font="Arial 19 bold",
-                                          bg=background_color,
+        self.maths_label = Label(self.converter_frame, text="Math Quiz",
+                                          font="Arial 32 bold",
+                                          bg="#F4F6FC",
                                           padx=10, pady=10)
-        self.maths_converter_label.grid(row=0)
-        # Temperature entry box (row 2)
-        self.to_convert_entry = Entry(self.converter_frame, width=1,
-                                      font="Arial 14 bold", bg="white")
-        self.to_convert_entry.grid(row=2)
+        self.maths_label.grid(row=0)
 
-        self.to_convert_entry = Entry(self.converter_frame, width=1,
-                                      font="Arial 14 bold", bg="white")
-        self.to_convert_entry.grid(row=2, column=1)
-        
-        self.game_buttons_frame = Frame(self.converter_frame, bg="#ADD8E6")
+        self.game_buttons_frame = Frame(self.converter_frame, bg="#F4F6FC")
 
         self.game_buttons_frame.grid(row=3, pady=10)
 
         self.to_a_button = Button(self.game_buttons_frame,
-                                  text="Addition", font="Arial 10 bold",
-                                  bg="yellow", padx=10, pady=10,
+                                  text="Addition", font="Arial 10",
+                                  bg="#CCE5FF", padx=10, pady=10,
                                   command=lambda: self.game(1))
         self.to_a_button.grid(row=0, column=0)
 
         self.to_d_button = Button(self.game_buttons_frame,
-                                  text="Division", font="Arial 10 bold",
-                                  bg="red", padx=10, pady=10,
+                                  text="Division", font="Arial 10",
+                                  bg="#CCE5FF", padx=10, pady=10,
                                   command=lambda: self.game(2))
         self.to_d_button.grid(row=1, column=0)
 
         self.to_m_button = Button(self.game_buttons_frame,
-                                  text="Multiplication", font="Arial 10 bold",
-                                  bg="red", padx=10, pady=10,
+                                  text="Multiplication", font="Arial 10",
+                                  bg="#CCE5FF", padx=10, pady=10,
                                   command=lambda: self.game(3))
         self.to_m_button.grid(row=2, column=0)
 
 
-        # history / Info button frame (row 5)
-        self.history_info_frame = Frame(self.converter_frame)
-        self.history_info_frame.grid(row=4, pady=10)
+        # stats / Info button frame (row 5)
+        self.stats_info_frame = Frame(self.converter_frame)
+        self.stats_info_frame.grid(row=4, pady=10)
 
-        self.history_button = Button(self.history_info_frame, font="Arial 12 bold",
-                                     text="Game Stats", width=15,
-                                     command=lambda: self.history(self.all_calc_list))
-        self.history_button.grid(row=0, column=0)
-
-        if len(self.all_calc_list) == 0:
-            self.history_button.config(state=DISABLED)
-
-        self.info_button = Button(self.history_info_frame, font="Arial 12 bold",
+        self.stats_button = Button(self.stats_info_frame, font="Arial 12",
+                                     text="Game Stats", width=15, bg="#D0CEE2",
+                                     command=lambda: self.stats(self.all_calc_list))
+        self.stats_button.grid(row=0, column=0)
+        
+        self.info_button = Button(self.stats_info_frame, font="Arial 12 bold", bg="#FAD9D5",
                                   text="Info", width=5, command=self.info)
         self.info_button.grid(row=0, column=1)
 
@@ -86,8 +76,8 @@ class Converter:
         get_info = Info(self)
         get_info.info_text.configure(text="Info text goes here")
 
-    def history(self, calc_history):
-        History(self, calc_history)
+    def stats(self, calc_stats):
+        Stats(self, calc_stats)
 
 
 class Info:
@@ -126,47 +116,42 @@ class Info:
         self.info_box.destroy()
 
 
-class History:
-    def __init__(self, partner, calc_histroy):
+class Stats:
+    def __init__(self, partner, calc_stats):
 
         background = "green"
 
         # disable info button
-        partner.history_button.config(state=DISABLED)
+        partner.stats_button.config(state=DISABLED)
 
         # Set up child window (ie: info box)
-        self.history_box = Toplevel()
+        self.stats_box = Toplevel()
 
         # If user press cross at top, closes info and 'releases' info button
-        self.history_box.protocol('WM_DELETE_WINDOW',
-                                  partial(self.close_history, partner))
+        self.stats_box.protocol('WM_DELETE_WINDOW',
+                                partial(self.close_stats, partner))
 
         # set up GUI Frame
-        self.history_frame = Frame(self.history_box, bg=background)
-        self.history_frame.grid()
+        self.stats_frame = Frame(self.stats_box, bg=background)
+        self.stats_frame.grid()
         # set up Info heading (row 0)
-        self.how_heading = Label(self.history_frame, text="Calculation history",
+        self.how_heading = Label(self.stats_frame, text="Calculation stats",
                                  font="arial 19 bold", bg=background)
         self.how_heading.grid(row=0)
         # Info text (label, row 1)
-        self.history_text = Label(self.history_frame,
-                                  text="Here are your most recent "
-                                  "calculations. Please use the "
-                                  "export button to create a text "
-                                  "file of all your calculations for "
-                                  "this session", font="arial 10 italic",
-                                  justify=LEFT, width=40, bg=background, wrap=250)
-        self.history_text.grid(row=1)
+        self.stats_text = Label(self.stats_frame, font="arial 10 italic",
+                                justify=LEFT, width=40, bg=background, wrap=250)
+        self.stats_text.grid(row=1)
 
-    def close_history(self, partner):
-        # Put history button back to normal...
-        partner.history_button.config(state=NORMAL)
-        self.history_box.destroy()
+    def close_stats(self, partner):
+        # Put stats button back to normal...
+        partner.stats_button.config(state=NORMAL)
+        self.stats_box.destroy()
 
-    def export_history(self, partner):
-        # Put history button back to normal...
-        partner.history_button.config(state=NORMAL)
-        self.history_box.destroy()
+    def export_stats(self, partner):
+        # Put stats button back to normal...
+        partner.stats_button.config(state=NORMAL)
+        self.stats_box.destroy()
 
 
 # main routine
