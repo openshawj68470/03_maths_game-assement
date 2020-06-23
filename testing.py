@@ -58,7 +58,6 @@ class Export:
 
                 background = "#F4F6FC"
 
-
                 # Set up child window (ie: export box)
                 self.export_box = Toplevel()
 
@@ -78,14 +77,14 @@ class Export:
                 # Export text (label, row 1)
                 self.export_text = Label(self.export_frame,
                                          text="Enter a filename in the box below and press the Save button"
-                                              " to save your Quiz results to a text file",
+                                              " to save your quiz results to a text file",
                                          justify=LEFT, width=40, bg=background, wrap=250)
                 self.export_text.grid(row=1)
 
                 # dismiss button (row 2)
                 self.export_txt = Label(self.export_frame, text="If the file you enter below already exists, "
                                                                 "its contents will be replaced with your "
-                                                                "Quiz results",
+                                                                "quiz results",
                                         bg=background, font="arial 10 bold",
                                         justify=LEFT, width=40, wrap=250)
                 self.export_txt.grid(row=2, pady=10)

@@ -8,6 +8,9 @@ class Quiz:
 
     def __init__(self):
 
+        # Initialise list to hold calculation history
+        self.all_stats_list = []
+
         # Formatting variables
         background_color = "#F4F6FC"
 
@@ -89,7 +92,7 @@ class Quiz:
 
         self.stats_button = Button(self.stats_info_frame, font="Arial 12",
                                      text="Game Stats", width=15, bg="#D0CEE2",
-                                     command=lambda: self.stats(self.all_calc_list))
+                                     command=lambda: self.stats(self.all_stats_list))
         self.stats_button.grid(row=0, column=0)
         
         self.info_button = Button(self.stats_info_frame, font="Arial 12", bg="#FAD9D5",
@@ -101,8 +104,8 @@ class Quiz:
         get_info = Info(self)
         get_info.info_text.configure(text="Info text goes here")
 
-    def stats(self, calc_stats):
-        Stats(self, calc_stats)
+    def stats(self, stats_list):
+        Stats(self, stats_list)
 
 
 class Info:
@@ -142,9 +145,9 @@ class Info:
 
 
 class Stats:
-    def __init__(self, partner, calc_stats):
+    def __init__(self, partner, stats_list):
 
-        background = "green"
+        background = "#F4F6FC"
 
         # disable info button
         partner.stats_button.config(state=DISABLED)
@@ -159,21 +162,39 @@ class Stats:
         # set up GUI Frame
         self.stats_frame = Frame(self.stats_box, bg=background)
         self.stats_frame.grid()
-        # set up Info heading (row 0)
-        self.how_heading = Label(self.stats_frame, text="Calculation stats",
-                                 font="arial 19 bold", bg=background)
-        self.how_heading.grid(row=0)
-        # Info text (label, row 1)
-        self.stats_text = Label(self.stats_frame, font="arial 10 italic",
-                                justify=LEFT, width=40, bg=background, wrap=250)
-        self.stats_text.grid(row=1)
+        # Temperature Converter Heading (row 0)
+        self.stats_label = Label(self.stats_frame, text="Stats",
+                                 font="Arial 19 bold",
+                                 bg=background,
+                                 padx=10, pady=10)
+        self.stats_label.grid(row=0)
+
+        # User instructions (row 1)
+        self.stats_label = Label(self.stats_frame,
+                                 text="these are the statistics from"
+                                      " your most recent quiz",
+                                 font="Arial 10 italic", justify=LEFT,
+                                 bg=background,
+                                 padx=10, pady=10)
+        self.stats_label.grid(row=1)
+
+        self.stats_label = Label(self.stats_frame,
+                                 text="",
+                                 font="Arial 10 italic", justify=LEFT,
+                                 bg=background,
+                                 padx=10, pady=10)
+        self.stats_label.grid(row=2)
+
+        # history / Help button frame (row 5)
+        self.Export_button_frame = Frame(self.stats_frame)
+        self.Export_button_frame.grid(row=5, pady=10)
+
+        self.dismiss_btn = Button(self.Export_button_frame, text="close",
+                                  bg="#FAD9D5", font="Arial 12 bold", width=20,
+                                  command=partial(self.close_stats, partner))
+        self.dismiss_btn.grid(row=0, column=1)
 
     def close_stats(self, partner):
-        # Put stats button back to normal...
-        partner.stats_button.config(state=NORMAL)
-        self.stats_box.destroy()
-
-    def export_stats(self, partner):
         # Put stats button back to normal...
         partner.stats_button.config(state=NORMAL)
         self.stats_box.destroy()
