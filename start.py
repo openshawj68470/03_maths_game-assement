@@ -4,62 +4,87 @@ from functools import partial   # To prevent unwanted windows
 import random
 
 
-class Converter:
+class Quiz:
 
     def __init__(self):
 
         # Formatting variables
         background_color = "#F4F6FC"
 
-        # Initialise list to hold calculation stats
-        self.all_calc_list = []
-        # Converter frame
-        self.converter_frame = Frame(bg=background_color, height=300, width=300,
-                                     pady=10)
-        self.converter_frame.grid()
+        # Quiz frame
+        self.quiz_frame = Frame(bg=background_color, height=300, width=300,
+                                pady=10, padx=10)
+        self.quiz_frame.grid(row=4)
 
-        # Temperature entry box (row 2)
+        # Entry Frame
+        self.entry_frame = Frame(bg=background_color, height=300, width=300,
+                                 pady=10,padx=10)
+        self.entry_frame.grid(row=2)
 
-        self.numbers_entry_1 = Entry(self.converter_frame, width=1,
-                                     font="Arial 14 bold", bg="white")
-        self.numbers_entry_1.grid(row=2)
+        self.entry_frame_2 = Frame(bg=background_color, height=300, width=300,
+                                 pady=10,padx=10)
+        self.entry_frame_2.grid(row=3)
 
-        self.numbers_entry_2 = Entry(self.converter_frame, width=1,
-                                     font="Arial 14 bold", bg="white")
-        self.numbers_entry_2.grid(row=2)
-
-        # maths Heading (row 0)
-        self.maths_label = Label(self.converter_frame, text="Math Quiz",
-                                          font="Arial 32 bold",
-                                          bg="#F4F6FC",
-                                          padx=10, pady=10)
+        # Heading (row 0)
+        self.maths_label = Label(text="Math Quiz",
+                                 font="Arial 32 bold",
+                                 bg="#F4F6FC",
+                                 padx=10, pady=10)
         self.maths_label.grid(row=0)
 
-        self.game_buttons_frame = Frame(self.converter_frame, bg="#F4F6FC")
+        # Entry (for numbers they wanna play between)(row 1)
+        self.Entry_label_1 = Label(text="numbers between",font="Arial 10",
+                                   bg="#F4F6FC", padx=10, pady=3)
+        self.Entry_label_1.grid(row=1)
+
+        self.Numbers_entry_1 = Entry(self.entry_frame, width=2,
+                                     font="Arial 10 bold", bg="white")
+        self.Numbers_entry_1.grid(row=1)
+
+        self.Entry_label_2 = Label(self.entry_frame, text="and",
+                                 font="Arial 10", bg="#F4F6FC",
+                                 padx=10, pady=1)
+        self.Entry_label_2.grid(row=1, column=2)
+
+        self.Numbers_entry_2 = Entry(self.entry_frame, width=2,
+                                     font="Arial 10 bold", bg="white")
+        self.Numbers_entry_2.grid(row=1, column=3)
+
+        self.Entry_label_2 = Label(self.entry_frame_2, text="Amount Of Questions",
+                                 font="Arial 10", bg="#F4F6FC",
+                                 padx=10, pady=1)
+        self.Entry_label_2.grid(column=2)
+
+        self.Numbers_entry_3 = Entry(self.entry_frame_2, width=2,
+                                     font="Arial 10 bold", bg="white")
+        self.Numbers_entry_3.grid(row=1, column=2)
+
+        # Game Buttons (row 2)
+        self.game_buttons_frame = Frame(self.quiz_frame, bg="#F4F6FC")
 
         self.game_buttons_frame.grid(row=3, pady=10)
 
         self.to_a_button = Button(self.game_buttons_frame,
-                                  text="Addition", font="Arial 10",
+                                  text="Addition", font="Arial 10", width=10,
                                   bg="#CCE5FF", padx=10, pady=10,
                                   command=lambda: self.game(1))
         self.to_a_button.grid(row=0, column=0)
 
         self.to_d_button = Button(self.game_buttons_frame,
-                                  text="Division", font="Arial 10",
+                                  text="Division", font="Arial 10", width=10,
                                   bg="#CCE5FF", padx=10, pady=10,
                                   command=lambda: self.game(2))
         self.to_d_button.grid(row=1, column=0)
 
         self.to_m_button = Button(self.game_buttons_frame,
-                                  text="Multiplication", font="Arial 10",
+                                  text="Multiplication", font="Arial 10", width=10,
                                   bg="#CCE5FF", padx=10, pady=10,
                                   command=lambda: self.game(3))
         self.to_m_button.grid(row=2, column=0)
 
 
         # stats / Info button frame (row 5)
-        self.stats_info_frame = Frame(self.converter_frame)
+        self.stats_info_frame = Frame(self.quiz_frame)
         self.stats_info_frame.grid(row=4, pady=10)
 
         self.stats_button = Button(self.stats_info_frame, font="Arial 12",
@@ -67,7 +92,7 @@ class Converter:
                                      command=lambda: self.stats(self.all_calc_list))
         self.stats_button.grid(row=0, column=0)
         
-        self.info_button = Button(self.stats_info_frame, font="Arial 12 bold", bg="#FAD9D5",
+        self.info_button = Button(self.stats_info_frame, font="Arial 12", bg="#FAD9D5",
                                   text="Info", width=5, command=self.info)
         self.info_button.grid(row=0, column=1)
 
@@ -158,5 +183,5 @@ class Stats:
 if __name__ == "__main__":
     root = Tk()
     root.title("maths")
-    something = Converter()
+    something = Quiz()
     root.mainloop()
