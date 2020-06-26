@@ -40,50 +40,51 @@ class Quiz:
                                    bg="#F4F6FC", padx=10, pady=3)
         self.Entry_label_1.grid(row=1)
 
-        self.Numbers_entry_1 = Entry(self.entry_frame, width=2,
+        self.Low_num_entry = Entry(self.entry_frame, width=2,
                                      font="Arial 10 bold", bg="white")
-        self.Numbers_entry_1.grid(row=1)
+        self.Low_num_entry.grid(row=1)
 
         self.Entry_label_2 = Label(self.entry_frame, text="and",
                                  font="Arial 10", bg="#F4F6FC",
                                  padx=10, pady=1)
         self.Entry_label_2.grid(row=1, column=2)
 
-        self.Numbers_entry_2 = Entry(self.entry_frame, width=2,
+        self.High_num_entry = Entry(self.entry_frame, width=2,
                                      font="Arial 10 bold", bg="white")
-        self.Numbers_entry_2.grid(row=1, column=3)
+        self.High_num_entry.grid(row=1, column=3)
 
         self.Entry_label_2 = Label(self.entry_frame_2, text="Amount Of Questions",
                                  font="Arial 10", bg="#F4F6FC",
                                  padx=10, pady=1)
         self.Entry_label_2.grid(column=2)
 
-        self.Numbers_entry_3 = Entry(self.entry_frame_2, width=2,
+        self.Num_quest_entry = Entry(self.entry_frame_2, width=2,
                                      font="Arial 10 bold", bg="white")
-        self.Numbers_entry_3.grid(row=1, column=2)
+        self.Num_quest_entry.grid(row=1, column=2)
 
         # Game Buttons (row 2)
         self.game_buttons_frame = Frame(self.quiz_frame, bg="#F4F6FC")
 
         self.game_buttons_frame.grid(row=3, pady=10)
 
-        self.to_a_button = Button(self.game_buttons_frame,
+        self.Addition_button = Button(self.game_buttons_frame,
                                   text="Addition", font="Arial 10", width=10,
                                   bg="#CCE5FF", padx=10, pady=10,
-                                  command=lambda: self.game(1))
-        self.to_a_button.grid(row=0, column=0)
+                                  command=lambda: self.addition)
+        self.Addition_button.grid(row=0, column=0)
 
-        self.to_d_button = Button(self.game_buttons_frame,
+        self.Division_button = Button(self.game_buttons_frame,
                                   text="Division", font="Arial 10", width=10,
                                   bg="#CCE5FF", padx=10, pady=10,
-                                  command=lambda: self.game(2))
-        self.to_d_button.grid(row=1, column=0)
+                                  command=lambda: self.division)
+        self.Division_button.grid(row=1, column=0)
 
-        self.to_m_button = Button(self.game_buttons_frame,
+        self.Multiplication_button = Button(self.game_buttons_frame,
                                   text="Multiplication", font="Arial 10", width=10,
                                   bg="#CCE5FF", padx=10, pady=10,
-                                  command=lambda: self.game(3))
-        self.to_m_button.grid(row=2, column=0)
+                                  command=lambda: self.multiplication)
+        self.Multiplication_button.grid(row=2, column=0)
+
 
 
         # stats / Info button frame (row 5)
@@ -107,10 +108,48 @@ class Quiz:
     def stats(self, stats_list):
         Stats(self, stats_list)
 
+    def multiplication(self, partner):
+        Multiplication(self, partner)
+
+
+class Multiplication:
+    def __init__(self, partner):
+        background = "#F4F6FC"
+
+        # disable multiplication button
+        partner.check.config(state=DISABLED)
+        # Set up child window (ie: multiplication box)
+        self.multiplication_box = Toplevel()
+
+        # If user press cross at top, closes multiplication and 'releases' multiplication button
+        self.multiplication_box.protocol('WM_DELETE_WINDOW', partial(self.close_info, partner))
+
+        # set up GUI Frame
+        self.info_frame = Frame(self.multiplication_box, bg=background)
+        self.info_frame.grid()
+        # set up Info heading (row 0)
+        self.how_heading = Label(self.info_frame, text="Info / Instructions",
+                                 font="arial 10 bold", bg=background)
+        self.how_heading.grid(row=0)
+        # Info text (label, row 1)
+        self.info_text = Label(self.info_frame, text="",
+                               justify=LEFT, width=40, bg=background, wrap=250)
+        self.info_text.grid(row=1)
+        # dismiss button (row 2)
+        self.dismiss_btn = Button(self.info_frame, text="dismiss",
+                                  width=10, bg="orange", font="arial 10 bold",
+                                  command=partial(self.close_info, partner))
+        self.dismiss_btn.grid(row=2, pady=10)
+
+    def close_info(self, partner):
+        # Put  multiplication button back to normal...
+        partner.info_button.config(state=NORMAL)
+        self.multiplication_box.destroy()
+
 
 class Info:
     def __init__(self, partner):
-        background = "orange"
+        background = "#F4F6FC"
 
         # disable info button
         partner.info_button.config(state=DISABLED)
