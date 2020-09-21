@@ -40,28 +40,28 @@ class Quiz:
                                  padx=10, pady=10)
         self.maths_label.grid(row=0)
 
-        # Entry and Labels(for numbers they wanna play between)(row 1)
+        # Label for when input is incorrect (row 5)
         self.amount_error_label = Label(self.error_frame, font="arial 10 italic",
                                         text="", bg=background_color)
         self.amount_error_label.grid(row=5, columnspan=6)
-
+        # Label for numbers between (row 0)
         self.entry_label_1 = Label(self.entry_frame, text="Numbers Between", font="Arial 10",
                                    bg="#F4F6FC", padx=10, pady=1)
         self.entry_label_1.grid(row=0, columnspan=5)
-
+        # entry for low number (row 1)
         self.low_num_entry = Entry(self.entry_frame, width=2,
                                    font="Arial 10 bold", bg="white")
         self.low_num_entry.grid(row=1, column=1)
-
+        # Label between low and high entry (row 1)
         self.entry_label_2 = Label(self.entry_frame, text="and",
                                    font="Arial 10", bg="#F4F6FC",
                                    padx=10, pady=1)
         self.entry_label_2.grid(row=1, column=2)
-
+        # entry for high number (row 1)
         self.high_num_entry = Entry(self.entry_frame, width=2,
                                     font="Arial 10 bold", bg="white")
         self.high_num_entry.grid(row=1, column=3)
-
+        # label for amount of questions (row
         self.entry_label_2 = Label(self.entry_frame, text="Amount Of Questions",
                                    font="Arial 10", bg="#F4F6FC",
                                    padx=10, pady=1)
@@ -100,7 +100,7 @@ class Quiz:
 
         self.help_frame = Frame(self.quiz_frame)
         self.help_frame.grid(row=3)
-
+        # Disables game buttons
         self.addition_btn.config(state=DISABLED)
         self.subtraction_btn.config(state=DISABLED)
         self.multiplication_btn.config(state=DISABLED)
@@ -146,11 +146,11 @@ class Quiz:
 
             if starting_question < 5:
                 has_error = "yes"
-                error_feedback = "You need to enter a higher number"
+                error_feedback = "unfortunately amount of questions is to low"
                 self.amount_entry.config(bg=error_back)
             elif starting_question > 20:
                 has_error = "yes"
-                error_feedback = "unfortunately that's to high"
+                error_feedback = "unfortunately amount of questions is to high"
                 self.amount_entry.config(bg=error_back)
 
         except ValueError:
@@ -163,7 +163,7 @@ class Quiz:
 
             if low_number < -100:
                 has_error = "yes"
-                error_feedback = "Your low number cant be lower then -100"
+                error_feedback = "Your low number cannot be lower than -100"
                 self.low_num_entry.config(bg=error_back)
             elif low_number > 99:
                 has_error = "yes"
@@ -217,7 +217,6 @@ class Quiz:
 
 class Game:
     def __init__(self, partner, op, starting_question, low_number, high_number):
-        print("                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ")
         starting_question = int(starting_question)
         questions_played = int(1)
         how_many_right = int(0)
@@ -230,6 +229,7 @@ class Game:
         self.history_questions = []
         background_color = "#F4F6FC"
 
+        # checks for what game button you pressed
         op = int(op)
 
         if op == 1:
@@ -263,10 +263,10 @@ class Game:
         partner.help_button.config(state=DISABLED)
 
         # Set up Geo game one
-        self.addition_box = Toplevel()
+        self.game_box = Toplevel()
 
         # Set up GUI Frame
-        self.game_frame = Frame(self.addition_box, width=300, bg=background_color)
+        self.game_frame = Frame(self.game_box, width=300, bg=background_color)
         self.game_frame.grid()
         # Set up Geo Instruction heading (row 0)
         self.heading = Label(self.game_frame, text=op_text,
@@ -304,6 +304,8 @@ class Game:
                                                                    self.history_questions))
         self.check_ans_btn.grid(row=1, column=1)
 
+        self.game_box.protocol('WM_DELETE_WINDOW', partial(self.close_game, partner))
+
     def check_ans(self, low_number, high_number, op, starting_question, questions_played, how_many_right,
                   history_questions):
         answer = self.game_entry.get()
@@ -319,14 +321,14 @@ class Game:
             answer = int(answer)
             correct = int(var_correct)
             self.history_questions.append(answer)
-
+            # Gives feedback on you answer
             if answer != correct:
-                self.feedback_label = Label(self.ask_questions_frame, text="Wrong answer ",
+                self.feedback_label = Label(self.ask_questions_frame, text="Incorrect answer ",
                                             font="arial 10 bold", fg="black", bg="#F4F6FC", pady=8, width=25)
                 self.feedback_label.grid(row=3)
 
             elif answer == correct:
-                self.feedback_label = Label(self.ask_questions_frame, text=" That's the right answer",
+                self.feedback_label = Label(self.ask_questions_frame, text=" Correct answer",
                                             font="arial 10 bold", fg="black", bg="#F4F6FC", pady=7, width=25)
                 self.feedback_label.grid(row=3)
                 how_many_right += 1
@@ -336,7 +338,7 @@ class Game:
             self.feedback_label = Label(self.ask_questions_frame, text=" No answer was given",
                                         font="arial 10 bold", fg="black", bg="#F4F6FC", pady=7, width=25)
             self.feedback_label.grid(row=3)
-
+            # add finished button over next and export button
         if questions_played >= starting_question:
             self.finished_btn = Label(self.dismiss_export_frame, text="Finished", font="arial 10 bold", fg="black",
                                       bg="#F4F6FC", pady=9, width=14)
@@ -364,6 +366,7 @@ class Game:
         self.game_entry.config(state=NORMAL)
         self.game_entry.delete(0, 'end')
 
+        # Give next question based on what game button you pressed
         if op == 1:
             hi_lo_num = random.randrange(low_number, high_number)
             hi_lo_num2 = random.randrange(low_number, high_number)
@@ -391,6 +394,7 @@ class Game:
 
         self.history_questions.append(questions)
 
+        # Button to check if input was correct or incorrect
         self.check_ans_btn = Button(self.dismiss_export_frame, text="Check Answer", font="arial 10 bold", fg="black",
                                     bg="#D0CEE2", pady=7, width=13,
                                     command=lambda: self.check_ans(low_number, high_number, op,
@@ -409,7 +413,7 @@ class Game:
         partner.high_num_entry.config(state=NORMAL)
         partner.amount_entry.config(state=NORMAL)
 
-        self.addition_box.destroy()
+        self.game_box.destroy()
 
     def export(self, low_number, high_number, questions_played, how_many_right, history_questions):
         Export(self, low_number, high_number, questions_played, how_many_right, history_questions)
